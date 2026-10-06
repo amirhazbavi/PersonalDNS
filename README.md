@@ -1,384 +1,546 @@
-<div align="center">🟣 PersonalDNS
+<div dir="rtl">🟣 PersonalDNS
 
-پلتفرم مدیریت DNS شخصی، سریع و چندکاربره 🇮🇷
+🚀 پلتفرم مدیریت DNS شخصی، سریع و چندکاربره برای ایران 🇮🇷
 
-مدیریت دامنه‌ها، رکوردهای DNS، کاربران و زیرساخت DNS در یک پنل مدرن
+PersonalDNS یک پلتفرم مدیریت DNS چندکاربره است که برای مدیریت متمرکز دامنه‌ها، Zoneها، رکوردهای DNS، کاربران، API، امنیت و مانیتورینگ طراحی شده است.
 
-<br>""GitHub" (https://img.shields.io/badge/GitHub-PersonalDNS-181717?style=for-the-badge&logo=github)" (https://github.com/amirhazbavi/PersonalDNS)
+هدف پروژه این است که مدیریت DNS از طریق یک پنل مدرن، فارسی، سریع و قابل توسعه انجام شود.
+
+</div>---
+
+<div align="center">""GitHub" (https://img.shields.io/badge/GitHub-PersonalDNS-181717?style=for-the-badge&logo=github&logoColor=white)" (https://github.com/amirhazbavi/PersonalDNS)
 ""License" (https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)" (LICENSE)
 ""Backend" (https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)" (https://fastapi.tiangolo.com/)
 ""Frontend" (https://img.shields.io/badge/Frontend-React-61DAFB?style=for-the-badge&logo=react&logoColor=111827)" (https://react.dev/)
 ""Docker" (https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)" (https://www.docker.com/)
 
-<br>⚡ سریع • 🔐 امن • 🌐 مقیاس‌پذیر • 🇮🇷 فارسی و RTL
+⚡ Fast • 🔐 Secure • 🌐 Scalable • 🇮🇷 Persian / RTL
 
 </div>---
 
-🚀 PersonalDNS چیست؟
+📖 فهرست مطالب
 
-PersonalDNS یک پلتفرم مدیریت DNS چندکاربره است که برای مدیریت حرفه‌ای دامنه‌ها و رکوردهای DNS طراحی شده است.
-
-هدف پروژه این است که مدیریت DNS را از یک کار پیچیده به یک تجربه ساده، سریع و قابل‌کنترل تبدیل کند.
-
-                 🌐 Internet
-                      │
-                      ▼
-              ┌───────────────┐
-              │   PersonalDNS │
-              │   Dashboard   │
-              └───────┬───────┘
-                      │
-          ┌───────────┼───────────┐
-          ▼           ▼           ▼
-       🌐 Domains   📋 Records   👥 Users
-          │           │           │
-          └───────────┼───────────┘
-                      ▼
-                 ⚡ PowerDNS
-                      │
-                      ▼
-                  DNS :53
+- "PersonalDNS چیست؟" (#-personaldns-چیست)
+- "این برنامه چه کاری انجام می‌دهد؟" (#-این-برنامه-چه-کاری-انجام-میدهد)
+- "نحوه کار" (#-نحوه-کار)
+- "امکانات" (#-امکانات)
+- "رکوردهای DNS" (#-رکوردهای-dns)
+- "کاربران و دسترسی‌ها" (#-کاربران-و-دسترسیها)
+- "معماری" (#-معماری)
+- "تکنولوژی‌ها" (#-تکنولوژیها)
+- "ساختار پروژه" (#-ساختار-پروژه)
+- "پیش‌نیازها" (#-پیشنیازها)
+- "نصب سریع" (#-نصب-سریع)
+- "نصب کامل روی VPS" (#-نصب-کامل-روی-vps)
+- "تنظیم Environment" (#-تنظیم-environment)
+- "اجرای Docker" (#-اجرای-docker)
+- "تنظیم دامنه" (#-تنظیم-دامنه)
+- "راه‌اندازی DNS واقعی" (#-راهاندازی-dns-واقعی)
+- "تست DNS" (#-تست-dns)
+- "API" (#-api)
+- "امنیت" (#-امنیت)
+- "DNSSEC" (#-dnssec)
+- "Backup" (#-backup)
+- "Monitoring" (#-monitoring)
+- "عیب‌یابی" (#-عیبیابی)
+- "Roadmap" (#-roadmap)
+- "مشارکت" (#-مشارکت)
+- "License" (#-license)
 
 ---
 
-✨ امکانات اصلی
+🟣 PersonalDNS چیست؟
 
-<table>
-<tr>
-<td width="50%">🌐 مدیریت DNS
+PersonalDNS یک سیستم مدیریت DNS است که یک پنل مدیریتی را به یک DNS Authoritative Server متصل می‌کند.
 
-- مدیریت چندین دامنه
-- ساخت و حذف Zone
-- مدیریت رکوردها
-- TTL قابل تنظیم
+در یک پروژه واقعی، ساختار کلی به این شکل است:
+
+                     🌐 Internet
+                          │
+                          ▼
+                  ┌────────────────┐
+                  │ Domain / DNS   │
+                  │    Clients     │
+                  └───────┬────────┘
+                          │
+                          ▼
+                  ┌────────────────┐
+                  │   PersonalDNS  │
+                  │    Dashboard   │
+                  └───────┬────────┘
+                          │
+                          ▼
+                     ┌─────────┐
+                     │ FastAPI │
+                     └────┬────┘
+                          │
+              ┌───────────┼───────────┐
+              ▼           ▼           ▼
+        PostgreSQL      Redis      PowerDNS
+                                      │
+                                      ▼
+                                   DNS :53
+
+---
+
+🎯 این برنامه چه کاری انجام می‌دهد؟
+
+فرض کنید یک دامنه دارید:
+
+example.com
+
+به‌جای اینکه مستقیماً فایل‌های DNS یا تنظیمات پیچیده سرور را مدیریت کنید، وارد PersonalDNS می‌شوید.
+
+مثلاً یک رکورد ایجاد می‌کنید:
+
+Type: A
+Name: www
+Value: 1.2.3.4
+TTL: 3600
+
+PersonalDNS این اطلاعات را مدیریت می‌کند و در معماری واقعی آن را به PowerDNS منتقل می‌کند.
+
+در نتیجه:
+
+www.example.com
+       │
+       ▼
+    DNS Query
+       │
+       ▼
+   PowerDNS
+       │
+       ▼
+    1.2.3.4
+
+بنابراین PersonalDNS فقط یک صفحه ظاهری نیست؛ در صورت اتصال صحیح به PowerDNS و زیرساخت عمومی، می‌تواند رابط مدیریت یک DNS Authoritative واقعی باشد.
+
+---
+
+🌐 DNS Authoritative چیست؟
+
+DNS Authoritative سرویسی است که اطلاعات معتبر یک دامنه را نگهداری می‌کند.
+
+مثلاً:
+
+example.com
+
+ممکن است رکوردهای زیر را داشته باشد:
+
+example.com       A       1.2.3.4
+www.example.com   A       1.2.3.4
+mail.example.com  A       1.2.3.5
+example.com       MX      mail.example.com
+
+وقتی Resolver درخواست DNS ارسال می‌کند، Nameserverهای Authoritative می‌توانند پاسخ معتبر دامنه را ارائه کنند.
+
+---
+
+✨ امکانات
+
+🌐 مدیریت دامنه
+
+- افزودن دامنه
+- حذف دامنه
+- مشاهده وضعیت دامنه
+- مدیریت Zone
 - مدیریت Nameserver
+- مدیریت رکوردها
+- بررسی وضعیت DNS
 
-</td><td width="50%">👥 چندکاربره
+---
 
-- ثبت‌نام کاربران
-- ورود امن
-- مدیریت پروفایل
-- Role و Permission
-- پنل مدیریت
+📋 مدیریت رکوردها
 
-</td>
-</tr><tr>
-<td>🔐 امنیت
+پشتیبانی معماری پروژه برای رکوردهای رایج:
 
-- JWT Authentication
+- "A"
+- "AAAA"
+- "CNAME"
+- "MX"
+- "TXT"
+- "NS"
+- "CAA"
+- "SRV"
+
+هر رکورد می‌تواند شامل مواردی مانند:
+
+Name
+Type
+Content
+TTL
+Priority
+
+باشد.
+
+---
+
+👥 سیستم چندکاربره
+
+PersonalDNS برای استفاده توسط چند کاربر طراحی شده است.
+
+مثلاً:
+
+👤 Amir
+├── example.com
+└── amir.ir
+
+👤 Ali
+├── ali.com
+└── test.net
+
+👤 Reza
+└── reza.ir
+
+هر کاربر باید فقط به منابعی که مجوز مدیریت آن‌ها را دارد دسترسی داشته باشد.
+
+---
+
+👑 سیستم نقش‌ها
+
+معماری سیستم می‌تواند نقش‌هایی مانند موارد زیر داشته باشد:
+
+نقش| دسترسی
+"User"| مدیریت منابع خودش
+"Manager"| مدیریت منابع اختصاص‌یافته
+"Admin"| مدیریت کاربران و سیستم
+"SuperAdmin"| دسترسی کامل
+
+---
+
+🔐 احراز هویت
+
+PersonalDNS برای API و پنل می‌تواند از:
+
+- JWT
 - Password Hashing
 - API Keys
-- Rate Limiting
-- Audit Logs
-- کنترل دسترسی
+- Session Management
+- Role-Based Access Control
 
-</td><td>📊 مانیتورینگ
+استفاده کند.
 
-- آمار DNS
-- وضعیت سرویس‌ها
-- Health Check
-- Prometheus
-- Grafana
-- گزارش رویدادها
+---
 
-</td>
-</tr>
-</table>---
+🔑 API Keys
+
+کاربر می‌تواند برای اتوماسیون یک API Key ایجاد کند.
+
+مثلاً:
+
+PersonalDNS
+     │
+     ▼
+API Key
+     │
+     ▼
+Automation
+     │
+     ▼
+DNS Management
+
+API Key واقعی نباید داخل Repository عمومی قرار بگیرد.
+
+---
+
+📊 داشبورد
+
+داشبورد می‌تواند اطلاعاتی مانند:
+
+┌─────────────────────────────────────────────┐
+│             🟣 PersonalDNS                  │
+├─────────────┬─────────────┬─────────────────┤
+│   Domains   │   Records   │    Users        │
+│     12      │     84      │      25         │
+├─────────────┴─────────────┴─────────────────┤
+│                                             │
+│              DNS Statistics                 │
+│                                             │
+│       Queries     Errors     Latency        │
+│         24K         12         ...          │
+│                                             │
+└─────────────────────────────────────────────┘
+
+را نمایش دهد.
+
+---
 
 📋 رکوردهای DNS
 
-PersonalDNS برای رکوردهای رایج DNS طراحی شده است:
-
 Record| کاربرد
-"A"| IPv4
-"AAAA"| IPv6
-"CNAME"| Alias
+"A"| آدرس IPv4
+"AAAA"| آدرس IPv6
+"CNAME"| نام مستعار
 "MX"| Mail Server
-"TXT"| Verification / SPF / سایر اطلاعات
-"NS"| Name Server
+"TXT"| متن، SPF و Verification
+"NS"| Nameserver
 "CAA"| Certificate Authority
 "SRV"| Service Discovery
 
 ---
 
-🎨 پنل مدیریت
+🧠 نحوه کار سیستم
 
-رابط کاربری پروژه با تمرکز روی تجربه کاربری ساخته می‌شود:
+وقتی کاربر یک رکورد ایجاد می‌کند:
 
-┌─────────────────────────────────────────────────────────┐
-│ 🟣 PersonalDNS                         🔔   👤 User     │
-├──────────────┬──────────────────────────────────────────┤
-│              │                                          │
-│ 🏠 Dashboard │   Overview                               │
-│              │                                          │
-│ 🌐 Domains   │   ┌────────┐ ┌────────┐ ┌────────┐     │
-│              │   │   12   │ │   84   │ │   11   │     │
-│ 📋 Records   │   │Domains │ │Records │ │ Active │     │
-│              │   └────────┘ └────────┘ └────────┘     │
-│ 🔐 DNSSEC    │                                          │
-│              │   🌐 example.com                         │
-│ 🔑 API Keys  │   ┌──────────────────────────────────┐   │
-│              │   │ 🟢 Active   12 Records           │   │
-│ 📊 Analytics │   │ ns1.example.com                  │   │
-│              │   └──────────────────────────────────┘   │
-│ 📝 Logs      │                                          │
-│              │   [+ Add Domain]                         │
-│ ⚙️ Settings  │                                          │
-└──────────────┴──────────────────────────────────────────┘
+        👤 User
+          │
+          ▼
+    React Dashboard
+          │
+          ▼
+      FastAPI API
+          │
+          ├──────────────► PostgreSQL
+          │
+          ├──────────────► Redis
+          │
+          ▼
+       PowerDNS API
+          │
+          ▼
+       DNS Zone
+          │
+          ▼
+       DNS :53
 
-«رابط نهایی پروژه می‌تواند کاملاً فارسی، RTL و Responsive باشد.»
-
----
-
-🧠 معماری
-
-                           ┌─────────────────┐
-                           │     Client      │
-                           │  Web / Mobile   │
-                           └────────┬────────┘
-                                    │
-                                    ▼
-                           ┌─────────────────┐
-                           │      Nginx      │
-                           │ Reverse Proxy   │
-                           └───────┬─┬───────┘
-                                   │ │
-                    ┌──────────────┘ └──────────────┐
-                    ▼                               ▼
-             ┌──────────────┐              ┌──────────────┐
-             │    React     │              │   FastAPI    │
-             │  Frontend    │              │     API      │
-             └──────────────┘              └──────┬───────┘
-                                                  │
-                     ┌────────────────────────────┼───────────────┐
-                     │                            │               │
-                     ▼                            ▼               ▼
-              ┌─────────────┐             ┌─────────────┐  ┌─────────────┐
-              │ PostgreSQL  │             │    Redis    │  │  PowerDNS   │
-              │   Database  │             │    Cache    │  │ Authoritative│
-              └─────────────┘             └─────────────┘  └──────┬──────┘
-                                                                   │
-                                                                   ▼
-                                                              DNS :53
+این جداسازی باعث می‌شود پنل مدیریت، دیتابیس و DNS Server از یکدیگر جدا باشند.
 
 ---
 
-🛠️ Tech Stack
+🏗️ معماری کامل
 
-<div align="center">بخش| فناوری
-🎨 Frontend| React + TypeScript
-⚙️ Backend| FastAPI + Python
-🌐 DNS| PowerDNS Authoritative
-🐘 Database| PostgreSQL
-⚡ Cache| Redis
-🌍 Proxy| Nginx
-📊 Monitoring| Prometheus + Grafana
-🐳 Deployment| Docker / Docker Compose
+                           🌐 INTERNET
+                                │
+                ┌───────────────┴───────────────┐
+                │                               │
+                ▼                               ▼
+          Web Browser                       DNS Clients
+                │                               │
+                ▼                               ▼
+             HTTPS                         UDP/TCP 53
+                │                               │
+                ▼                               ▼
+          ┌──────────┐                    ┌──────────┐
+          │  Nginx   │                    │ PowerDNS │
+          └────┬─────┘                    └────┬─────┘
+               │                               │
+          ┌────┴────┐                          │
+          ▼         ▼                          │
+       React     FastAPI ◄─────────────────────┘
+                    │
+          ┌─────────┼──────────┐
+          ▼         ▼          ▼
+     PostgreSQL   Redis     Monitoring
+                              │
+                              ▼
+                         Prometheus
+                              │
+                              ▼
+                           Grafana
 
-</div>---
+---
+
+🛠️ تکنولوژی‌ها
+
+بخش| تکنولوژی
+Frontend| React + TypeScript
+Backend| FastAPI + Python
+DNS| PowerDNS Authoritative
+Database| PostgreSQL
+Cache| Redis
+Reverse Proxy| Nginx
+Monitoring| Prometheus + Grafana
+Container| Docker
+Orchestration| Docker Compose
+
+---
 
 📁 ساختار پروژه
 
 PersonalDNS/
 │
-├── 📁 backend/
-│   ├── 📁 app/
-│   │   ├── 📁 api/
-│   │   ├── 📁 core/
-│   │   ├── 📁 models/
-│   │   ├── 📁 schemas/
-│   │   ├── 📁 services/
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── core/
+│   │   ├── models/
+│   │   ├── schemas/
+│   │   ├── services/
 │   │   └── main.py
 │   │
 │   ├── Dockerfile
 │   ├── requirements.txt
 │   └── .env.example
 │
-├── 📁 frontend/
-│   ├── 📁 src/
-│   ├── 📁 public/
+├── frontend/
+│   ├── src/
+│   ├── public/
 │   ├── package.json
 │   └── Dockerfile
 │
-├── 📁 powerdns/
+├── powerdns/
 │   └── pdns.conf
 │
-├── 📁 nginx/
+├── nginx/
 │   └── nginx.conf
 │
-├── 📁 monitoring/
+├── monitoring/
 │   ├── prometheus.yml
 │   └── grafana/
 │
-├── 🐳 docker-compose.yml
-├── 📄 README.md
-└── 📄 LICENSE
+├── docker-compose.yml
+├── README.md
+└── LICENSE
 
 ---
 
-⚡ نصب سریع
+💻 پیش‌نیازها
 
-1️⃣ دریافت پروژه
+برای اجرای کامل روی اینترنت پیشنهاد می‌شود داشته باشید:
+
+- Linux VPS یا Server
+- IPv4 عمومی
+- Docker
+- Docker Compose
+- Git
+- یک Domain
+- دسترسی SSH
+- امکان بازکردن پورت "53/UDP"
+- امکان بازکردن پورت "53/TCP"
+
+برای تست محلی، VPS و IP عمومی ضروری نیست.
+
+---
+
+🚀 نصب سریع
+
+1. دریافت پروژه
 
 git clone https://github.com/amirhazbavi/PersonalDNS.git
 cd PersonalDNS
 
-2️⃣ تنظیم Environment
+---
+
+2. ساخت فایل تنظیمات
 
 cp backend/.env.example backend/.env
 
-3️⃣ اجرای سرویس‌ها
+---
+
+3. ویرایش تنظیمات
+
+nano backend/.env
+
+نمونه:
+
+DATABASE_URL=postgresql://personaldns:CHANGE_ME@postgres:5432/personaldns
+
+REDIS_URL=redis://redis:6379
+
+SECRET_KEY=CHANGE_THIS_TO_A_LONG_RANDOM_SECRET
+
+POWERDNS_API_URL=http://powerdns:8081
+
+POWERDNS_API_KEY=CHANGE_ME
+
+---
+
+🐳 اجرای پروژه با Docker
 
 docker compose up -d --build
 
-4️⃣ بررسی وضعیت
+بررسی سرویس‌ها:
 
 docker compose ps
 
----
+مشاهده Log:
 
-🔗 آدرس سرویس‌ها
-
-سرویس| آدرس
-🖥️ Dashboard| "http://localhost:3000"
-⚙️ API| "http://localhost:8000"
-📚 Swagger| "http://localhost:8000/docs"
-📖 ReDoc| "http://localhost:8000/redoc"
+docker compose logs -f
 
 ---
 
-🔌 API
+🌐 آدرس‌های محلی
 
-نمونه Endpointهای اصلی:
+بعد از اجرای موفق:
 
-POST /api/auth/register
-POST /api/auth/login
+Dashboard
 
-GET /api/domains
-POST /api/domains
-GET /api/domains/{id}
-DELETE /api/domains/{id}
+http://localhost:3000
 
-GET /api/domains/{id}/records
-POST /api/domains/{id}/records
+Backend API
 
-PUT /api/records/{id}
-DELETE /api/records/{id}
+http://localhost:8000
 
----
+Swagger
 
-🔐 Security
+http://localhost:8000/docs
 
-PersonalDNS با درنظرگرفتن امنیت یک سرویس چندکاربره طراحی می‌شود.
+ReDoc
 
-🔒 Authentication
-
-User
- │
- ▼
-Login
- │
- ▼
-JWT
- │
- ▼
-API
-
-🛡️ قابلیت‌ها
-
-- JWT Authentication
-- Password Hashing
-- API Keys
-- Role-Based Access Control
-- Rate Limiting
-- Input Validation
-- Audit Logging
-- CORS Configuration
-- HTTPS در Production
-- محدودسازی PowerDNS API
-- مدیریت Secretها با Environment Variables
-
-«🚨 هیچ Password، Token یا API Key واقعی را داخل GitHub قرار ندهید.»
+http://localhost:8000/redoc
 
 ---
 
-🔐 DNSSEC
+🖥️ نصب کامل روی VPS
 
-ساختار پروژه برای استفاده از DNSSEC آماده طراحی شده است.
+1. اتصال به VPS
 
-Domain
-   │
-   ▼
-DNSSEC
-   │
-   ├── DNSKEY
-   ├── DS
-   └── RRSIG
+ssh root@SERVER_IP
 
-فعال‌سازی نهایی DNSSEC باید متناسب با تنظیمات واقعی PowerDNS و Registrar انجام شود.
+به‌جای:
+
+SERVER_IP
+
+IP واقعی VPS را وارد کنید.
 
 ---
 
-🇮🇷 امکانات مخصوص ایران
+📦 نصب Git
 
-PersonalDNS با تمرکز ویژه روی کاربران فارسی‌زبان طراحی شده است:
+برای Ubuntu/Debian:
 
-- 🇮🇷 رابط فارسی
-- ↔️ پشتیبانی RTL
-- 💰 نمایش قیمت به تومان در صورت اضافه‌شدن Billing
-- 📱 طراحی مناسب موبایل
-- 🌐 آماده اتصال به Registrarهای مختلف
-- 🛠️ معماری قابل توسعه برای سرویس‌های داخلی
+apt update
+apt install git curl -y
 
-«اتصال واقعی به یک Registrar یا درگاه پرداخت، نیازمند API رسمی همان سرویس و پیاده‌سازی Adapter مربوطه است.»
+بررسی:
+
+git --version
 
 ---
 
-📊 Monitoring
+🐳 نصب Docker
 
-                 PersonalDNS
-                      │
-          ┌───────────┴───────────┐
-          ▼                       ▼
-      Application              PowerDNS
-          │                       │
-          └───────────┬───────────┘
-                      ▼
-                 Prometheus
-                      │
-                      ▼
-                   Grafana
-                      │
-                      ▼
-                📈 Dashboard
+curl -fsSL https://get.docker.com | sh
+
+بررسی:
+
+docker --version
+
+بررسی Compose:
+
+docker compose version
 
 ---
 
-🌍 استفاده به‌عنوان DNS واقعی
+📥 دریافت PersonalDNS
 
-برای استفاده واقعی از PersonalDNS به‌عنوان Authoritative DNS، سرویس باید روی زیرساختی اجرا شود که امکان دریافت ترافیک DNS روی:
+git clone https://github.com/amirhazbavi/PersonalDNS.git
 
-UDP 53
-TCP 53
+سپس:
 
-را داشته باشد.
-
-نمونه Nameserver:
-
-ns1.example.com → SERVER_IP
-ns2.example.com → SERVER_IP
-
-و در صورت نیاز Registrar باید Glue Recordهای مربوط به Nameserverها را نیز تنظیم کند.
-
-«⚠️ GitHub Pages فقط برای Frontend/Static Website مناسب است و جایگزین Authoritative DNS Server نیست.»
+cd PersonalDNS
 
 ---
 
-⚙️ Environment
+⚙️ تنظیم Environment
 
-نمونه تنظیمات:
+cp backend/.env.example backend/.env
+nano backend/.env
 
-DATABASE_URL=postgresql://user:password@postgres:5432/personaldns
+نمونه:
+
+DATABASE_URL=postgresql://personaldns:CHANGE_ME@postgres:5432/personaldns
 
 REDIS_URL=redis://redis:6379
 
@@ -388,92 +550,494 @@ POWERDNS_API_URL=http://powerdns:8081
 
 POWERDNS_API_KEY=CHANGE_ME
 
----
+🔒 نکته امنیتی
 
-🧪 توسعه
+مقادیر زیر را عمومی نکنید:
 
-Backend:
+SECRET_KEY
+DATABASE_PASSWORD
+POWERDNS_API_KEY
+API_KEYS
 
-cd backend
-
-python -m venv .venv
-
-# Linux / macOS
-source .venv/bin/activate
-
-pip install -r requirements.txt
-
-uvicorn app.main:app --reload
-
-Frontend:
-
-cd frontend
-
-npm install
-
-npm run dev
+و فایل ".env" را Commit نکنید.
 
 ---
 
-🐳 Docker
+🔥 تنظیم Firewall
 
-اجرای کامل:
+DNS به هر دو پروتکل نیاز دارد:
 
-docker compose up -d --build
+UDP 53
+TCP 53
 
-مشاهده Logها:
+اگر UFW دارید:
 
-docker compose logs -f
+ufw allow 53/udp
+ufw allow 53/tcp
 
-خاموش‌کردن:
+برای SSH:
+
+ufw allow 22/tcp
+
+برای HTTP:
+
+ufw allow 80/tcp
+
+برای HTTPS:
+
+ufw allow 443/tcp
+
+سپس:
+
+ufw enable
+
+«علاوه بر UFW، Firewall پنل VPS یا Cloud Provider را نیز بررسی کنید.»
+
+---
+
+🌍 اتصال دامنه
+
+فرض کنید دامنه شما:
+
+example.com
+
+و IP سرور:
+
+1.2.3.4
+
+Nameserverها:
+
+ns1.example.com
+ns2.example.com
+
+هستند.
+
+در Registrar باید در صورت نیاز Glue Record ایجاد شود:
+
+ns1.example.com → 1.2.3.4
+ns2.example.com → 1.2.3.4
+
+سپس Nameserver دامنه را روی:
+
+ns1.example.com
+ns2.example.com
+
+قرار دهید.
+
+---
+
+⚠️ DNS واقعی
+
+برای اینکه PersonalDNS واقعاً DNS دامنه را سرو کند، مسیر زیر باید درست باشد:
+
+Domain
+   │
+   ▼
+Registrar
+   │
+   ▼
+NS Records
+   │
+   ▼
+Public IP
+   │
+   ▼
+Firewall
+   │
+   ▼
+Port 53
+   │
+   ▼
+PowerDNS
+   │
+   ▼
+PersonalDNS
+
+صرفاً اجرای سایت یا GitHub Pages باعث فعال‌شدن DNS واقعی نمی‌شود.
+
+---
+
+🧪 تست DNS
+
+بعد از تنظیم Nameserver:
+
+dig example.com
+
+یا:
+
+dig @SERVER_IP example.com
+
+رکورد A:
+
+dig @SERVER_IP example.com A
+
+رکورد MX:
+
+dig @SERVER_IP example.com MX
+
+رکورد TXT:
+
+dig @SERVER_IP example.com TXT
+
+---
+
+🔄 مدیریت Docker
+
+اجرا
+
+docker compose up -d
+
+توقف
 
 docker compose down
 
+Restart
+
+docker compose restart
+
+Build مجدد
+
+docker compose up -d --build
+
+مشاهده وضعیت
+
+docker compose ps
+
+مشاهده Log
+
+docker compose logs -f
+
 ---
 
-📈 مسیر توسعه
+🔌 API
 
-- [x] معماری Multi-User
-- [x] REST API Design
-- [x] Docker Architecture
-- [x] React + FastAPI Architecture
-- [ ] اتصال کامل PowerDNS
-- [ ] DNSSEC کامل
-- [ ] Billing
-- [ ] سیستم Subscription
-- [ ] Registrar Adapters
-- [ ] Advanced Analytics
-- [ ] Backup & Restore
-- [ ] Multi-Server DNS
-- [ ] High Availability
+PersonalDNS می‌تواند API مرکزی برای مدیریت DNS داشته باشد.
+
+Authentication
+
+POST /api/auth/register
+POST /api/auth/login
+
+Domains
+
+GET /api/domains
+POST /api/domains
+GET /api/domains/{id}
+DELETE /api/domains/{id}
+
+Records
+
+GET /api/domains/{id}/records
+POST /api/domains/{id}/records
+PUT /api/records/{id}
+DELETE /api/records/{id}
+
+Health
+
+GET /health
+
+Swagger:
+
+http://SERVER_IP:8000/docs
+
+---
+
+🔐 امنیت
+
+برای Production موارد زیر باید رعایت شوند:
+
+- استفاده از HTTPS
+- Secretهای قوی
+- Hash کردن Passwordها
+- JWT امن
+- API Keyهای امن
+- Rate Limiting
+- Validation
+- RBAC
+- Audit Logs
+- محدودکردن دسترسی PowerDNS API
+- Firewall
+- Backup
+- عدم قرار دادن Secret در Git
+- عدم قرار دادن PostgreSQL روی اینترنت عمومی
+
+---
+
+🔐 PowerDNS API
+
+PowerDNS API باید تا حد امکان فقط داخل شبکه داخلی Docker قابل دسترسی باشد.
+
+ساختار پیشنهادی:
+
+Internet
+   │
+   ├── HTTPS :443 ──► Nginx
+   │
+   └── DNS :53 ─────► PowerDNS
+                         ▲
+                         │
+                    Internal API
+                         │
+                      FastAPI
+
+PowerDNS API نباید بدون نیاز روی اینترنت عمومی قرار بگیرد.
+
+---
+
+🔐 DNSSEC
+
+DNSSEC برای افزایش اعتبار و امنیت پاسخ‌های DNS استفاده می‌شود.
+
+ساختار کلی:
+
+Domain
+   │
+   ▼
+DNSSEC
+   │
+   ├── DNSKEY
+   ├── RRSIG
+   └── DS
+
+فعال‌سازی کامل DNSSEC به تنظیمات واقعی PowerDNS، Zoneها و Registrar وابسته است.
+
+---
+
+📊 Monitoring
+
+PersonalDNS می‌تواند با Prometheus و Grafana مانیتور شود.
+
+PersonalDNS
+     │
+     ├── API Metrics
+     ├── Database Metrics
+     ├── DNS Metrics
+     └── System Metrics
+              │
+              ▼
+         Prometheus
+              │
+              ▼
+           Grafana
+
+موارد قابل مانیتور:
+
+- تعداد درخواست‌ها
+- خطاها
+- وضعیت API
+- وضعیت DNS
+- مصرف منابع
+- Latency
+- وضعیت Database
+
+---
+
+💾 Backup
+
+برای Backup PostgreSQL:
+
+docker compose exec postgres \
+pg_dump -U personaldns personaldns > backup.sql
+
+برای Restore:
+
+cat backup.sql | \
+docker compose exec -T postgres \
+psql -U personaldns personaldns
+
+«نام کاربر و Database باید با "docker-compose.yml" واقعی پروژه یکسان باشد.»
+
+---
+
+🧹 حذف پروژه
+
+برای متوقف‌کردن سرویس‌ها:
+
+docker compose down
+
+برای حذف Volumeها:
+
+docker compose down -v
+
+«⚠️ "down -v" می‌تواند داده‌های موجود در Docker Volumeها را حذف کند. قبل از اجرای آن Backup بگیرید.»
+
+---
+
+🛠️ عیب‌یابی
+
+Docker اجرا نمی‌شود
+
+docker --version
+docker compose version
+
+سپس:
+
+docker compose ps
+
+---
+
+Backend اجرا نمی‌شود
+
+docker compose logs backend
+
+فایل Environment را بررسی کنید:
+
+cat backend/.env
+
+---
+
+Frontend باز نمی‌شود
+
+docker compose logs frontend
+
+و:
+
+docker compose ps
+
+---
+
+PowerDNS اجرا نمی‌شود
+
+docker compose logs powerdns
+
+همچنین:
+
+docker compose ps powerdns
+
+---
+
+DNS پاسخ نمی‌دهد
+
+ابتدا پورت‌ها:
+
+ufw status
+
+سپس:
+
+dig @SERVER_IP example.com
+
+و Logهای PowerDNS:
+
+docker compose logs -f powerdns
+
+---
+
+📱 رابط کاربری
+
+PersonalDNS برای استفاده در:
+
+- 💻 Desktop
+- 💻 Laptop
+- 📱 Mobile
+- 📱 Tablet
+
+طراحی می‌شود.
+
+رابط فارسی:
+
+RTL
+
+و رابط انگلیسی:
+
+LTR
+
+می‌تواند پشتیبانی شود.
+
+---
+
+🇮🇷 تمرکز روی ایران
+
+PersonalDNS برای کاربران فارسی‌زبان می‌تواند شامل موارد زیر باشد:
+
+- 🇮🇷 رابط فارسی
+- ↔️ RTL
+- 💰 نمایش قیمت به تومان
+- 📱 طراحی Mobile First
+- 🌐 پشتیبانی از دامنه‌های مختلف
+- 🔌 معماری قابل اتصال به Registrarهای مختلف
+- 🧾 آماده توسعه سیستم Billing
+
+«اتصال واقعی به Registrar یا Payment Gateway به API رسمی آن سرویس نیاز دارد و نباید بدون مستندات رسمی ادعا شود که اتصال فعال است.»
+
+---
+
+📈 کارایی و مقیاس‌پذیری
+
+PersonalDNS با معماری جداشده طراحی شده است:
+
+Frontend
+    │
+    ▼
+Backend
+    │
+    ├── Database
+    ├── Cache
+    └── DNS
+
+این ساختار امکان توسعه برای:
+
+- چندین کاربر
+- تعداد زیاد دامنه
+- تعداد زیاد رکورد
+- چند DNS Server
+- Load Balancing
+- High Availability
+
+را فراهم می‌کند.
+
+«⚠️ سرعت و ظرفیت واقعی به سخت‌افزار، شبکه، تنظیمات PowerDNS، Database و معماری Deployment بستگی دارد و نباید عدد عملکردی خاصی بدون Benchmark واقعی تضمین شود.»
 
 ---
 
 🗺️ Roadmap
 
 Phase 1
-████████████████████  Architecture
+
+- [x] معماری اولیه
+- [x] طراحی Backend
+- [x] طراحی Frontend
+- [x] Docker Architecture
 
 Phase 2
-████████████████░░░░  DNS Management
+
+- [ ] User Authentication
+- [ ] Domain Management
+- [ ] DNS Record Management
+- [ ] PowerDNS Integration
 
 Phase 3
-████████████░░░░░░░░  Multi-User
+
+- [ ] DNSSEC
+- [ ] API Keys
+- [ ] Audit Logs
+- [ ] Advanced Permissions
 
 Phase 4
-████████░░░░░░░░░░░░  DNSSEC
+
+- [ ] Monitoring
+- [ ] Analytics
+- [ ] Backup System
+- [ ] Notifications
 
 Phase 5
-██████░░░░░░░░░░░░░░  Billing
+
+- [ ] Billing
+- [ ] Subscription
+- [ ] Registrar Adapters
+- [ ] Multi-Server DNS
 
 Phase 6
-████░░░░░░░░░░░░░░░░  High Availability
+
+- [ ] High Availability
+- [ ] Multiple DNS Nodes
+- [ ] Automatic Failover
+- [ ] Global DNS Infrastructure
 
 ---
 
 🤝 مشارکت
 
-Pull Requestها و Issueها برای توسعه پروژه استقبال می‌شوند.
+برای مشارکت:
 
 git clone https://github.com/amirhazbavi/PersonalDNS.git
 
@@ -481,11 +1045,37 @@ cd PersonalDNS
 
 git checkout -b feature/my-feature
 
-بعد از اعمال تغییرات:
+پس از تغییرات:
 
 git add .
 git commit -m "Add new feature"
 git push origin feature/my-feature
+
+سپس Pull Request ایجاد کنید.
+
+---
+
+🐛 گزارش مشکل
+
+اگر مشکلی پیدا کردید، در GitHub Issues گزارش دهید:
+
+Repository:
+
+https://github.com/amirhazbavi/PersonalDNS
+
+Issues:
+
+https://github.com/amirhazbavi/PersonalDNS/issues
+
+هنگام گزارش Bug بهتر است موارد زیر را اضافه کنید:
+
+OS:
+Docker Version:
+Docker Compose Version:
+Browser:
+Error:
+Steps to Reproduce:
+Logs:
 
 ---
 
@@ -495,26 +1085,26 @@ PersonalDNS تحت مجوز MIT منتشر شده است.
 
 ---
 
-🔗 Links
+🔗 لینک‌های پروژه
 
-📦 Repository
+📦 GitHub
 
-""GitHub" (https://img.shields.io/badge/Repository-PersonalDNS-181717?style=for-the-badge&logo=github)" (https://github.com/amirhazbavi/PersonalDNS)
+""GitHub" (https://img.shields.io/badge/GitHub-PersonalDNS-181717?style=for-the-badge&logo=github&logoColor=white)" (https://github.com/amirhazbavi/PersonalDNS)
 
 🐛 Issues
 
-""Issues" (https://img.shields.io/badge/Report-Issue-e11d48?style=for-the-badge&logo=github)" (https://github.com/amirhazbavi/PersonalDNS/issues)
+""Issues" (https://img.shields.io/badge/GitHub-Issues-e11d48?style=for-the-badge&logo=github&logoColor=white)" (https://github.com/amirhazbavi/PersonalDNS/issues)
 
 ---
 
 <div align="center">🟣 PersonalDNS
 
-DNS Management, Simplified.
+Personal DNS Management Platform
 
-⚡ Fast • 🔐 Secure • 🌐 Scalable • 🇮🇷 RTL
+⚡ Fast • 🔐 Secure • 🌐 Scalable • 🇮🇷 Persian / RTL
 
-<br>Made with ❤️ for Persian developers
+<br>Built for modern DNS management.
 
-PersonalDNS © 2026
+<br>PersonalDNS © 2026
 
 </div>
