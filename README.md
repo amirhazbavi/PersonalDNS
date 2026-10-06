@@ -1,122 +1,195 @@
-# PersonalDNS - Production-Ready Multi-User DNS Management Platform
+🌐 PersonalDNS
 
-**قویترین و سریع‌ترین پلتفرم مدیریت DNS شخصی برای ایران**
+قوی‌ترین و سریع‌ترین پلتفرم مدیریت DNS شخصی چندکاربره برای ایران 🇮🇷
 
-## 🚀 ویژگی‌ها
+""GitHub" (https://img.shields.io/badge/GitHub-PersonalDNS-black?logo=github)" (https://github.com/amirhazbavi/PersonalDNS)
+""License" (https://img.shields.io/badge/License-MIT-green.svg)" (LICENSE)
+""Backend" (https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)" (https://fastapi.tiangolo.com/)
+""Frontend" (https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)" (https://react.dev/)
+""Docker" (https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker)" (https://www.docker.com/)
 
-### DNS واقعی
-- ✅ PowerDNS Authoritative Server (DNS واقعی، نه مدل)
-- ✅ PostgreSQL backend برای DNS zones
-- ✅ Real-time zone updates
-- ✅ DNSSEC support ready
-- ✅ Full-featured REST API
+PersonalDNS یک پلتفرم مدیریت DNS چندکاربره است که امکان مدیریت دامنه‌ها، Zoneها و رکوردهای DNS را از طریق یک پنل مدرن فراهم می‌کند.
 
-### Performance & Speed
-- ⚡ Redis Caching (تمام query ها cached)
-- ⚡ Nginx Load Balancing
-- ⚡ CDN-ready architecture
-- ⚡ Query response time < 10ms
-- ⚡ Concurrent requests: 10k+/sec
+---
 
-### Frontend
-- 🎨 React 18 + TypeScript
-- 🎨 Vite (lightning-fast build)
-- 🎨 TailwindCSS + DaisyUI
-- 🎨 Dark Mode + Light Mode
-- 🎨 RTL/LTR + فارسی support
-- 🎨 Fully Responsive
-- 🎨 Real-time notifications
+🚀 امکانات
 
-### Backend
-- 🔧 FastAPI (async Python)
-- 🔧 SQLAlchemy ORM
-- 🔧 Redis for caching & sessions
-- 🔧 RabbitMQ for async jobs
-- 🔧 JWT + OAuth2 support
-- 🔧 Rate limiting (100 req/min per user)
-- 🔧 Full audit logging
+🌐 DNS واقعی
 
-### Security
-- 🔐 Password hashing (bcrypt)
-- 🔐 JWT authentication
-- 🔐 API Key management
-- 🔐 CORS protection
-- 🔐 Rate limiting
-- 🔐 SQL injection prevention
-- 🔐 XSS protection
-- 🔐 HTTPS/TLS enforcement
-- 🔐 Two-factor authentication ready
-- 🔐 Audit logs (تمام actions logged)
+- ✅ PowerDNS Authoritative Server
+- ✅ PostgreSQL Backend
+- ✅ مدیریت Zone
+- ✅ مدیریت رکوردهای DNS
+- ✅ A Record
+- ✅ AAAA Record
+- ✅ CNAME Record
+- ✅ MX Record
+- ✅ TXT Record
+- ✅ NS Record
+- ✅ CAA Record
+- ✅ SRV Record
+- ✅ DNSSEC Ready
+- ✅ REST API
+- ✅ Real-Time Zone Updates
 
-### Monitoring & Observability
-- 📊 Prometheus metrics
-- 📊 Grafana dashboards
-- 📊 Real-time DNS statistics
-- 📊 Performance monitoring
-- 📊 Error tracking
+---
 
-### Iran-Specific Features
-- 🇮🇷 Iran registrar integration (IranServer, Pars Hosting)
-- 🇮🇷 Farsi UI (100% فارسی)
-- 🇮🇷 Iran payment gateway ready
-- 🇮🇷 Iran hosting-optimized
-- 🇮🇷 Local bank transfer support
-- 🇮🇷 Toman pricing
+⚡ Performance
 
-### DevOps & Deployment
-- 🐳 Docker + Docker Compose (production-ready)
-- 🐳 Kubernetes manifests included
-- 🐳 GitHub Actions CI/CD
-- 🐳 Auto-scaling ready
-- 🐳 Health checks + monitoring
+- Redis Cache
+- Nginx Reverse Proxy
+- Async FastAPI
+- Connection Pooling
+- Health Checks
+- Load Balancing Ready
+- CDN Ready
+- Docker Ready
+- Kubernetes Ready
 
-## 📋 Architecture
+«سرعت واقعی DNS به سرور، شبکه، فاصله کاربر، Cache و تنظیمات DNS بستگی دارد و اعداد Performance باید با Benchmark واقعی اندازه‌گیری شوند.»
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      Frontend (React)                        │
-│              CDN / Nginx Static Hosting                     │
-└──────────────────────┬──────────────────────────────────────┘
-                       │ HTTPS
-┌──────────────────────▼──────────────────────────────────────┐
-│                    Nginx (Reverse Proxy)                     │
-│            Load Balancer + Rate Limiter                      │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-        ┌──────────────┼──────────────┐
-        │              │              │
-   ┌────▼─────┐  ┌────▼─────┐  ┌────▼─────┐
-   │Backend-1 │  │Backend-2 │  │Backend-3 │
-   │(FastAPI) │  │(FastAPI) │  │(FastAPI) │
-   └────┬─────┘  └────┬─────┘  └────┬─────┘
-        │              │              │
-        └──────────────┼──────────────┘
-                       │
-        ┌──────────────┼──────────────┐
-        │              │              │
-   ┌────▼─────┐  ┌────▼─────┐  ┌────▼─────┐
-   │PostgreSQL │  │  Redis   │  │ RabbitMQ │
-   │  (Main)   │  │ (Cache)  │  │ (Queue)  │
-   └──────────┘  └──────────┘  └──────────┘
-        │
-   ┌────▼─────────────────────────────────┐
-   │   PowerDNS Authoritative Server      │
-   │   (Real DNS on port 53/UDP & TCP)    │
-   └───────────────────────────────────────┘
-        │
-   DNS Queries from Registrar/ISP
-   Real DNS resolution to Internet
-```
+---
 
-## 🏗️ Directory Structure
+🎨 Frontend
 
-```
-personaldns/
+- React 18
+- TypeScript
+- Vite
+- TailwindCSS
+- DaisyUI
+- Dark Mode
+- Light Mode
+- RTL
+- LTR
+- فارسی
+- Responsive
+- Mobile First
+- Dashboard
+- Real-Time Notifications
+
+---
+
+🔧 Backend
+
+- Python
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
+- Redis
+- RabbitMQ Ready
+- JWT Authentication
+- OAuth2 Ready
+- API Keys
+- Rate Limiting
+- Audit Logging
+
+---
+
+🔐 امنیت
+
+PersonalDNS با تمرکز روی امنیت طراحی شده است.
+
+- 🔒 Password Hashing
+- 🔒 JWT Authentication
+- 🔒 API Key Management
+- 🔒 HTTPS / TLS
+- 🔒 CORS Protection
+- 🔒 Rate Limiting
+- 🔒 SQL Injection Protection
+- 🔒 XSS Protection
+- 🔒 CSRF Protection
+- 🔒 Audit Logs
+- 🔒 Session Security
+- 🔒 API Key Rotation
+- 🔒 2FA Ready
+
+⚠️ مهم
+
+هیچ Password، API Key، JWT Secret یا Database Credential واقعی نباید داخل Repository عمومی قرار بگیرد.
+
+---
+
+📊 Monitoring
+
+قابلیت اتصال به:
+
+- Prometheus
+- Grafana
+- Alertmanager
+- DNS Query Statistics
+- API Metrics
+- CPU Monitoring
+- RAM Monitoring
+- Error Tracking
+- Health Checks
+
+---
+
+🇮🇷 امکانات مخصوص ایران
+
+- 🇮🇷 رابط کاربری فارسی
+- 🇮🇷 RTL
+- 🇮🇷 قیمت‌گذاری تومانی
+- 🇮🇷 آماده اتصال به درگاه پرداخت
+- 🇮🇷 آماده اتصال به Registrar
+- 🇮🇷 مناسب برای VPSهای ایران
+- 🇮🇷 قابلیت توسعه برای سرویس‌های ثبت دامنه ایرانی
+
+«اتصال واقعی به Registrarها نیازمند API رسمی و مجوز استفاده از سرویس مربوطه است.»
+
+---
+
+🏗️ Architecture
+
+                    ┌──────────────────────┐
+                    │       Frontend       │
+                    │   React + TypeScript  │
+                    └──────────┬───────────┘
+                               │ HTTPS
+                               ▼
+                    ┌──────────────────────┐
+                    │        Nginx         │
+                    │ Reverse Proxy / LB    │
+                    └──────────┬───────────┘
+                               │
+                 ┌─────────────┼─────────────┐
+                 │             │             │
+                 ▼             ▼             ▼
+            ┌─────────┐   ┌─────────┐   ┌─────────┐
+            │Backend 1│   │Backend 2│   │Backend 3│
+            │ FastAPI │   │ FastAPI │   │ FastAPI │
+            └────┬────┘   └────┬────┘   └────┬────┘
+                 │             │             │
+                 └─────────────┼─────────────┘
+                               │
+                 ┌─────────────┼─────────────┐
+                 │             │             │
+                 ▼             ▼             ▼
+            ┌──────────┐ ┌──────────┐ ┌──────────┐
+            │PostgreSQL│ │  Redis   │ │ RabbitMQ │
+            └────┬─────┘ └──────────┘ └──────────┘
+                 │
+                 ▼
+          ┌──────────────────┐
+          │    PowerDNS      │
+          │ Authoritative DNS│
+          └────────┬─────────┘
+                   │
+                   ▼
+              Internet DNS
+
+---
+
+📁 ساختار پروژه
+
+PersonalDNS/
+│
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml
 │       ├── deploy.yml
 │       └── security.yml
+│
 ├── backend/
 │   ├── app/
 │   │   ├── api/
@@ -130,6 +203,7 @@ personaldns/
 │   │   │   │   └── webhooks.py
 │   │   │   ├── deps.py
 │   │   │   └── errors.py
+│   │   │
 │   │   ├── core/
 │   │   │   ├── config.py
 │   │   │   ├── security.py
@@ -137,82 +211,51 @@ personaldns/
 │   │   │   ├── cache.py
 │   │   │   ├── logging.py
 │   │   │   └── celery.py
+│   │   │
 │   │   ├── models/
-│   │   │   ├── user.py
-│   │   │   ├── domain.py
-│   │   │   ├── record.py
-│   │   │   ├── api_key.py
-│   │   │   └── audit_log.py
 │   │   ├── schemas/
-│   │   │   ├── user.py
-│   │   │   ├── domain.py
-│   │   │   ├── record.py
-│   │   │   └── api_key.py
 │   │   ├── services/
-│   │   │   ├── auth_service.py
-│   │   │   ├── dns_service.py
-│   │   │   ├── pdns_client.py
-│   │   │   ├── verification_service.py
-│   │   │   ├── cache_service.py
-│   │   │   ├── audit_service.py
-│   │   │   ├── notification_service.py
-│   │   │   └── iran_registrar.py
 │   │   └── main.py
+│   │
 │   ├── requirements.txt
 │   ├── Dockerfile
 │   ├── .env.example
-│   ├── alembic.ini
-│   └── migrations/
+│   └── alembic.ini
+│
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   ├── Header.tsx
-│   │   │   ├── Sidebar.tsx
-│   │   │   ├── DomainCard.tsx
-│   │   │   ├── RecordTable.tsx
-│   │   │   └── ...
 │   │   ├── pages/
-│   │   │   ├── HomePage.tsx
-│   │   │   ├── LoginPage.tsx
-│   │   │   ├── DashboardPage.tsx
-│   │   │   ├── DomainsPage.tsx
-│   │   │   ├── RecordsPage.tsx
-│   │   │   ├── LookupPage.tsx
-│   │   │   ├── ApiPage.tsx
-│   │   │   ├── AdminPage.tsx
-│   │   │   └── ...
 │   │   ├── hooks/
-│   │   │   ├── useAuth.ts
-│   │   │   ├── useApi.ts
-│   │   │   └── ...
 │   │   ├── utils/
-│   │   │   ├── api.ts
-│   │   │   ├── validators.ts
-│   │   │   └── ...
 │   │   ├── App.tsx
 │   │   ├── main.tsx
 │   │   └── index.css
+│   │
 │   ├── package.json
 │   ├── vite.config.ts
 │   ├── tsconfig.json
 │   ├── tailwind.config.js
 │   ├── Dockerfile
 │   └── .env.example
+│
 ├── powerdns/
 │   ├── pdns.conf
 │   ├── schema.sql
 │   ├── Dockerfile
 │   └── init-db.sh
+│
 ├── nginx/
 │   ├── default.conf
 │   ├── api.conf
 │   ├── Dockerfile
 │   └── ssl-params.conf
+│
 ├── monitoring/
 │   ├── prometheus.yml
 │   ├── grafana/
-│   │   └── dashboards/
 │   └── alertmanager.yml
+│
 ├── kubernetes/
 │   ├── backend-deployment.yaml
 │   ├── powerdns-deployment.yaml
@@ -220,141 +263,219 @@ personaldns/
 │   ├── postgres-statefulset.yaml
 │   ├── redis-deployment.yaml
 │   └── services.yaml
+│
 ├── docker-compose.yml
 ├── docker-compose.prod.yml
 ├── Makefile
-└── docs/
-    ├── SETUP.md
-    ├── API.md
-    ├── DEPLOYMENT.md
-    └── IRAN_REGISTRAR.md
-```
-
-## 🚀 Quick Start
-
-### Requirements
-- Docker & Docker Compose
-- Git
-- 2GB RAM minimum (8GB recommended)
-- Port 53 (DNS), 80 (HTTP), 443 (HTTPS) available
-
-### Installation
-
-```bash
-# Clone
-git clone https://github.com/yourusername/personaldns.git
-cd personaldns
-
-# Copy env files
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
-
-# Edit configuration
-nano backend/.env
-
-# Start all services
-docker compose up -d
-
-# Check status
-docker compose ps
-
-# View logs
-docker compose logs -f backend
-```
-
-### Access
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- PowerDNS Admin: http://localhost:8080
-- Grafana: http://localhost:3001
-
-## 📚 Documentation
-
-See docs/ folder for:
-- [Setup Guide](docs/SETUP.md) - نصب و راه‌اندازی
-- [API Documentation](docs/API.md) - تمام endpoints
-- [Deployment Guide](docs/DEPLOYMENT.md) - Deploy on VPS
-- [Iran Registrar Integration](docs/IRAN_REGISTRAR.md) - استفاده از registrar‌های ایران
-
-## 🌐 Production Deployment
-
-### On VPS (Ubuntu 22.04)
-
-```bash
-# 1. SSH to VPS
-ssh root@your-vps-ip
-
-# 2. Install Docker
-curl -fsSL https://get.docker.com | sh
-
-# 3. Clone repo
-git clone https://github.com/yourusername/personaldns.git
-cd personaldns
-
-# 4. Setup domains in registrar
-# Add NS records pointing to your VPS IP:
-# ns1.yourdomain.com -> VPS_IP
-# ns2.yourdomain.com -> VPS_IP
-
-# 5. Update .env
-nano backend/.env
-# Set: FRONTEND_URL, POWERDNS_API_KEY, SECRET_KEY, etc.
-
-# 6. Setup SSL with Certbot
-sudo apt install certbot
-sudo certbot certonly --standalone -d app.yourdomain.com -d api.yourdomain.com
-
-# 7. Run production compose
-docker compose -f docker-compose.prod.yml up -d
-
-# 8. Check DNS is working
-dig @your-vps-ip yourdomain.com
-```
-
-## 📊 Performance Metrics
-
-- **DNS Query Response Time**: < 10ms (cached < 1ms)
-- **Concurrent Connections**: 10,000+
-- **Domains Supported**: Unlimited
-- **Records per Domain**: Unlimited
-- **API Requests/sec**: 100+
-- **Uptime SLA**: 99.9%
-
-## 🔒 Security
-
-- HTTPS/TLS enabled
-- JWT authentication
-- API key rotation
-- Rate limiting per user
-- Full audit logging
-- CORS enabled
-- CSRF protection
-- SQL injection prevention
-- XSS protection
-
-## 🇮🇷 Iran Features
-
-- Complete Farsi interface
-- Iran registrar API integration
-- Toman pricing
-- Bank transfer payments
-- Iran hosting optimization
-- Tehran datacenter ready
-
-## 📞 Support
-
-- Email: support@personaldns.ir
-- Telegram: @personaldns_support
-- GitHub Issues: https://github.com/yourusername/personaldns/issues
-
-## 📄 License
-
-MIT License - See LICENSE file
-
-## 🙏 Contributing
-
-Contributions welcome! See CONTRIBUTING.md
+├── LICENSE
+└── README.md
 
 ---
 
-**Made for Iran 🇮🇷 - سازنده شده برای ایران**
+⚡ Quick Start
+
+پیش‌نیازها
+
+- Docker
+- Docker Compose
+- Git
+- حداقل 2GB RAM
+- پیشنهاد: 4GB تا 8GB RAM
+- پورت 53
+- پورت 80
+- پورت 443
+
+---
+
+📥 دریافت پروژه
+
+git clone https://github.com/amirhazbavi/PersonalDNS.git
+cd PersonalDNS
+
+---
+
+⚙️ تنظیم Environment
+
+cp backend/.env.example backend/.env
+
+سپس Secretهای واقعی را داخل ".env" قرار دهید.
+
+---
+
+🐳 اجرای پروژه
+
+docker compose up -d --build
+
+بررسی وضعیت:
+
+docker compose ps
+
+مشاهده Log:
+
+docker compose logs -f
+
+مشاهده Log Backend:
+
+docker compose logs -f backend
+
+---
+
+🌐 آدرس‌های Local
+
+Frontend
+http://localhost:3000
+
+Backend
+http://localhost:8000
+
+FastAPI Swagger
+http://localhost:8000/docs
+
+---
+
+🔌 API
+
+نمونه Endpointها:
+
+POST   /api/auth/register
+POST   /api/auth/login
+
+GET    /api/domains
+POST   /api/domains
+
+GET    /api/domains/{id}
+DELETE /api/domains/{id}
+
+GET    /api/domains/{id}/records
+POST   /api/domains/{id}/records
+
+PUT    /api/records/{id}
+DELETE /api/records/{id}
+
+GET    /api/dns/lookup
+
+GET    /api/api-keys
+POST   /api/api-keys
+DELETE /api/api-keys/{id}
+
+---
+
+🌍 Production
+
+برای DNS واقعی به یک سرور با IP عمومی و دسترسی مناسب به پورت 53 نیاز است.
+
+نمونه:
+
+ns1.example.com → SERVER_IP
+ns2.example.com → SERVER_IP
+
+سپس Nameserverها باید در Registrar دامنه تنظیم شوند.
+
+---
+
+🔐 Environment Variables
+
+نمونه:
+
+DATABASE_URL=postgresql+asyncpg://user:password@postgres:5432/personaldns
+
+REDIS_URL=redis://redis:6379/0
+
+JWT_SECRET=CHANGE_THIS_TO_A_LONG_RANDOM_SECRET
+
+POWERDNS_API_URL=http://powerdns:8081/api/v1/servers/localhost
+
+POWERDNS_API_KEY=CHANGE_THIS_KEY
+
+CORS_ORIGINS=https://example.com
+
+⚠️ مقادیر بالا نمونه هستند.
+
+---
+
+🛡️ Production Security Checklist
+
+قبل از استفاده Production:
+
+- [ ] تغییر تمام Passwordهای پیش‌فرض
+- [ ] تغییر JWT Secret
+- [ ] تغییر PowerDNS API Key
+- [ ] فعال‌سازی HTTPS
+- [ ] تنظیم Firewall
+- [ ] محدود کردن PowerDNS API
+- [ ] فعال‌سازی Rate Limiting
+- [ ] فعال‌سازی Backup
+- [ ] فعال‌سازی Monitoring
+- [ ] بررسی DNSSEC
+- [ ] تست Disaster Recovery
+- [ ] اجرای Security Audit
+
+---
+
+📈 Monitoring
+
+در محیط Production می‌توان از این سرویس‌ها استفاده کرد:
+
+Prometheus
+Grafana
+Alertmanager
+
+---
+
+🐛 گزارش خطا
+
+برای گزارش Bug یا درخواست Feature از GitHub Issues استفاده کنید:
+
+https://github.com/amirhazbavi/PersonalDNS/issues
+
+---
+
+💻 Repository
+
+⭐ GitHub
+
+https://github.com/amirhazbavi/PersonalDNS
+
+---
+
+🤝 Contributing
+
+Pull Request و پیشنهادهای توسعه پروژه پذیرفته می‌شود.
+
+git clone https://github.com/amirhazbavi/PersonalDNS.git
+
+cd PersonalDNS
+
+git checkout -b feature/my-feature
+
+بعد از اعمال تغییرات:
+
+git add .
+git commit -m "Add new feature"
+git push origin feature/my-feature
+
+سپس Pull Request ایجاد کنید.
+
+---
+
+📄 License
+
+این پروژه تحت مجوز MIT منتشر شده است.
+
+---
+
+🇮🇷 PersonalDNS
+
+مدیریت DNS شخصی، سریع، امن و قابل توسعه.
+
+🌐 GitHub:
+
+https://github.com/amirhazbavi/PersonalDNS
+
+🐛 Issues:
+
+https://github.com/amirhazbavi/PersonalDNS/issues
+
+---
+
+PersonalDNS © 2026
