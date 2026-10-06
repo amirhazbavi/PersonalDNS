@@ -3,15 +3,6 @@
 قوی‌ترین و سریع‌ترین پلتفرم مدیریت DNS شخصی چندکاربره برای ایران 🇮🇷
 
 PersonalDNS یک پلتفرم مدرن برای مدیریت دامنه‌ها، رکوردهای DNS، کاربران و زیرساخت DNS است که با تمرکز بر سرعت، امنیت، مقیاس‌پذیری و رابط کاربری فارسی/RTL طراحی شده است.
-
-<p align="center">""GitHub" (https://img.shields.io/badge/GitHub-PersonalDNS-black?logo=github&logoColor=white)" (https://github.com/amirhazbavi/PersonalDNS)
-""License" (https://img.shields.io/badge/License-MIT-green.svg)" (LICENSE)
-""Backend" (https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi&logoColor=white)" (https://fastapi.tiangolo.com/)
-""Frontend" (https://img.shields.io/badge/Frontend-React-61DAFB?logo=react&logoColor=black)" (https://react.dev/)
-""Docker" (https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)" (https://www.docker.com/)
-
-</p>---
-
 🚀 امکانات
 
 - 🌐 مدیریت چندین دامنه
