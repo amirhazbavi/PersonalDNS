@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PersonalDNS - مدیریت DNS شخصی</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0f1419;
+            --bg-secondary: #1a1f26;
+            --bg-tertiary: #242a33;
+            --text: #e4e6eb;
+            --text-secondary: #b0b3b8;
+            --primary: #0a66c2;
+            --primary-light: #0084ff;
+            --primary-dark: #0050b3;
+            --success: #31a24c;
+            --danger: #e74856;
+            --warning: #ffb81c;
+            --border: #3a3f47;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links .btn {
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+        }
+
+        .auth-links {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        /* Main Content */
+        main {
+            min-height: calc(100vh - 60px);
+            padding: 2rem 0;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"],
+        input[type="number"],
+        input[type="url"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(10, 102, 194, 0.1);
+        }
+
+        /* Home Page */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Auth Forms */
+        .auth-container {
+            max-width: 400px;
+            margin: 4rem auto;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .auth-container h2 {
+            margin-bottom: 2rem;
+            text-align: center;
+            color: var(--text);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 0.5rem 0;
+        }
+
+        .stat-card .label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Domains Table */
+        .table-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 1rem;
+            text-align: right;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-verified {
+            background: rgba(49, 162, 76, 0.2);
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: rgba(255, 184, 28, 0.2);
+            color: var(--warning);
+        }
+
+        .status-failed {
+            background: rgba(231, 72, 86, 0.2);
+            color: var(--danger);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: rgba(49, 162, 76, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .alert-error {
+            background: rgba(231, 72, 86, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .alert-warning {
+            background: rgba(255, 184, 28, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+
+        /* DNS Lookup */
+        .lookup-form {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .lookup-results {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .result-item {
+            background: var(--bg-tertiary);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+            border-left: 3px solid var(--primary);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: var(--text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .hero-buttons .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo" onclick="showPage('home')">PersonalDNS</a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#" onclick="showPage('home')">خانه</a></li>
+                    <li><a href="#" onclick="showPage('lookup')">DNS Lookup</a></li>
+                    <li><a href="#" class="auth-link">مستندات</a></li>
+                    <div class="auth-links" id="authLinks">
+                        <button class="btn btn-secondary btn-small" onclick="showPage('login')">ورود</button>
+                        <button class="btn btn-primary btn-small" onclick="showPage('register')">ثبت‌نام</button>
+                    </div>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Home Page -->
+            <div id="home" class="page active">
+                <div class="hero">
+                    <h1>🌐 PersonalDNS</h1>
+                    <p>پلتفرم حرفه‌ای مدیریت DNS شخصی برای دامنه‌های شما</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary" onclick="showPage('register')">شروع رایگان</button>
+                        <button class="btn btn-secondary" onclick="showPage('lookup')">تست DNS</button>
+                    </div>
+                </div>
+
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>⚡ سرعت بالا</h3>
+                        <p>DNS واقعی با سرعت کمتر از 10ms</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🔒 امنیت تمام</h3>
+                        <p>HTTPS، JWT، و رمزگذاری کامل</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🎯 کنترل کامل</h3>
+                        <p>مدیریت رکوردهای A, AAAA, MX, TXT و...</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📊 آمار دقیق</h3>
+                        <p>نمایش زنده درخواست‌ها و عملکرد</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>🌍 پشتیبانی ایران</h3>
+                        <p>ادغام کامل با registrar‌های ایرانی</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>📱 API قوی</h3>
+                        <p>REST API برای برنامه‌های خارجی</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Login Page -->
+            <div id="login" class="page">
+                <div class="auth-container">
+                    <h2>ورود به حساب</h2>
+                    <div class="alert alert-error" id="loginError"></div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label>ایمیل</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رمز عبور</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">ورود</button>
+                    </form>
+                    <div class="auth-footer">
+                        حساب ندارید؟ <a href="#" onclick="showPage('register')">ثبت‌نام کنید</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Register Page -->
+            <div id="register" class="page">
+                <div class="auth-container">
+                    <h2>ایجاد حساب جدید</h2>
+                    <div class="alert alert-error" id="registerError"></div>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label>نام کامل</label>
+                            <input type="text" id="fullName">
+                        </div>
+                        <div class="form-group">
+                            <label>ایمیل</label>
+                            <input type="email" id="registerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رمز عبور</label>
+                            <input type="password" id="registerPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label>تکرار رمز عبور</label>
+                            <input type="password" id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">ثبت‌نام</button>
+                    </form>
+                    <div class="auth-footer">
+                        حساب دارید؟ <a href="#" onclick="showPage('login')">وارد شوید</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="dashboard" class="page">
+                <h2>داشبورد</h2>
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="label">دامنه‌ها</div>
+                        <div class="value" id="domainsCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">رکوردها</div>
+                        <div class="value" id="recordsCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">وضعیت DNS</div>
+                        <div class="value" style="color: var(--success);">✓</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">آخرین فعالیت</div>
+                        <div class="value" style="font-size: 1rem;">امروز</div>
+                    </div>
+                </div>
+
+                <h3>دامنه‌های شما</h3>
+                <button class="btn btn-primary" onclick="showModal('addDomainModal')">+ افزودن دامنه</button>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>دامنه</th>
+                                <th>وضعیت</th>
+                                <th>رکوردها</th>
+                                <th>تاریخ</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="domainsTable">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: var(--text-secondary);">بارگذاری...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- DNS Lookup -->
+            <div id="lookup" class="page">
+                <h2>DNS Lookup</h2>
+                <div class="lookup-form">
+                    <div class="form-group">
+                        <label>دامنه یا IP آدرس</label>
+                        <input type="text" id="lookupQuery" placeholder="example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>نوع رکورد</label>
+                        <select id="recordType">
+                            <option>A</option>
+                            <option>AAAA</option>
+                            <option>MX</option>
+                            <option>TXT</option>
+                            <option>NS</option>
+                            <option>CNAME</option>
+                            <option>SOA</option>
+                            <option>SRV</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="performLookup()" style="width: 100%;">جستجو</button>
+                </div>
+                <div id="lookupResults"></div>
+            </div>
+
+            <!-- Domains Page -->
+            <div id="domains" class="page">
+                <h2>مدیریت دامنه‌ها</h2>
+                <button class="btn btn-primary" onclick="showModal('addDomainModal')">+ افزودن دامنه</button>
+                <div class="table-container" style="margin-top: 2rem;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>دامنه</th>
+                                <th>وضعیت</th>
+                                <th>تأیید</th>
+                                <th>DNS</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allDomainsTable">
+                            <tr>
+                                <td colspan="5" style="text-align: center;">دامنه‌ای موجود نیست</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Domain Modal -->
+    <div id="addDomainModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>افزودن دامنه جدید</h2>
+                <button class="close-btn" onclick="closeModal('addDomainModal')">×</button>
+            </div>
+            <div class="alert alert-error" id="domainError"></div>
+            <form id="addDomainForm">
+                <div class="form-group">
+                    <label>نام دامنه</label>
+                    <input type="text" id="domainName" placeholder="example.com" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">افزودن</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // API Base URL
+        const API_BASE = 'http://localhost:8000/api';
+        let authToken = localStorage.getItem('token');
+
+        // Show/Hide Pages
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            // Load data for specific pages
+            if (pageId === 'dashboard' && authToken) {
+                loadDashboard();
+            } else if (pageId === 'domains' && authToken) {
+                loadDomains();
+            }
+        }
+
+        // Show/Hide Modal
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Show Alert
+        function showAlert(elementId, message, type = 'error') {
+            const alert = document.getElementById(elementId);
+            alert.textContent = message;
+            alert.className = `alert show alert-${type}`;
+            setTimeout(() => alert.classList.remove('show'), 5000);
+        }
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.access_token;
+                    localStorage.setItem('token', authToken);
+                    document.getElementById('authLinks').innerHTML = `
+                        <span style="color: var(--text-secondary); margin-right: 1rem;">سلام ${email}</span>
+                        <button class="btn btn-secondary btn-small" onclick="logout()">خروج</button>
+                    `;
+                    showAlert('loginError', 'ورود موفق!', 'success');
+                    setTimeout(() => showPage('dashboard'), 1000);
+                } else {
+                    showAlert('loginError', data.detail || 'ورود ناموفق');
+                }
+            } catch (error) {
+                showAlert('loginError', 'خطا در ارتباط با سرور');
+            }
+        });
+
+        // Register
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const fullName = document.getElementById('fullName').value;
+            
+            if (password !== confirmPassword) {
+                showAlert('registerError', 'رمز عبور‌ها با هم مطابقت ندارند');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, full_name: fullName })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    authToken = data.access_token;
+                    localStorage.setItem('token', authToken);
+                    document.getElementById('authLinks').innerHTML = `
+                        <span style="color: var(--text-secondary); margin-right: 1rem;">سلام ${email}</span>
+                        <button class="btn btn-secondary btn-small" onclick="logout()">خروج</button>
+                    `;
+                    showAlert('registerError', 'ثبت‌نام موفق!', 'success');
+                    setTimeout(() => showPage('dashboard'), 1000);
+                } else {
+                    showAlert('registerError', data.detail || 'ثبت‌نام ناموفق');
+                }
+            } catch (error) {
+                showAlert('registerError', 'خطا در ارتباط با سرور');
+            }
+        });
+
+        // Logout
+        function logout() {
+            authToken = null;
+            localStorage.removeItem('token');
+            document.getElementById('authLinks').innerHTML = `
+                <button class="btn btn-secondary btn-small" onclick="showPage('login')">ورود</button>
+                <button class="btn btn-primary btn-small" onclick="showPage('register')">ثبت‌نام</button>
+            `;
+            showAlert('loginError', 'خروج موفق', 'success');
+            showPage('home');
+        }
+
+        // Load Dashboard
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_BASE}/domains`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const domains = await response.json();
+                    document.getElementById('domainsCount').textContent = domains.length;
+                    
+                    // Load records count
+                    let totalRecords = 0;
+                    for (const domain of domains) {
+                        const recordsResponse = await fetch(`${API_BASE}/domains/${domain.id}/records`, {
+                            headers: { 'Authorization': `Bearer ${authToken}` }
+                        });
+                        if (recordsResponse.ok) {
+                            const records = await recordsResponse.json();
+                            totalRecords += records.length;
+                        }
+                    }
+                    document.getElementById('recordsCount').textContent = totalRecords;
+                    
+                    // Show domains table
+                    displayDomainsTable(domains);
+                }
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+
+        // Display Domains Table
+        function displayDomainsTable(domains) {
+            const tbody = document.getElementById('domainsTable');
+            
+            if (domains.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-secondary);">هیچ دامنه‌ای موجود نیست</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = domains.map(domain => `
+                <tr>
+                    <td>${domain.name}</td>
+                    <td><span class="status-badge status-${domain.status}">${domain.status}</span></td>
+                    <td><a href="#" onclick="showPage('domains'); manageDomain(${domain.id})">مدیریت</a></td>
+                    <td>${new Date(domain.created_at).toLocaleDateString('fa-IR')}</td>
+                    <td>
+                        <button class="btn btn-small btn-secondary" onclick="editDomain(${domain.id})">ویرایش</button>
+                        <button class="btn btn-small btn-danger" onclick="deleteDomain(${domain.id})">حذف</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Load Domains
+        async function loadDomains() {
+            try {
+                const response = await fetch(`${API_BASE}/domains`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                if (response.ok) {
+                    const domains = await response.json();
+                    displayDomainsTable(domains);
+                }
+            } catch (error) {
+                console.error('Error loading domains:', error);
+            }
+        }
+
+        // Add Domain
+        document.getElementById('addDomainForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('domainName').value;
+            
+            try {
+                const response = await fetch(`${API_BASE}/domains`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showAlert('domainError', 'دامنه با موفقیت اضافه شد', 'success');
+                    closeModal('addDomainModal');
+                    document.getElementById('addDomainForm').reset();
+                    loadDashboard();
+                } else {
+                    showAlert('domainError', data.detail || 'ناموفق بود');
+                }
+            } catch (error) {
+                showAlert('domainError', 'خطا در ارتباط با سرور');
+            }
+        });
+
+        // DNS Lookup
+        async function performLookup() {
+            const query = document.getElementById('lookupQuery').value;
+            const recordType = document.getElementById('recordType').value;
+            
+            if (!query) {
+                showAlert('lookupResults', 'لطفاً دامنه یا IP را وارد کنید');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('lookupResults');
+            resultsDiv.innerHTML = '<div class="lookup-results"><div class="loading"></div> جستجو...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/dns/lookup?q=${query}&record_type=${recordType}`, {
+                    headers: authToken ? { 'Authorization': `Bearer ${authToken}` } : {}
+                });
+                
+                const data = await response.json();
+                
+                if (data.resolved) {
+                    resultsDiv.innerHTML = `
+                        <div class="lookup-results">
+                            <h3>نتایج جستجو</h3>
+                            <div class="result-item">دامنه: ${data.query}</div>
+                            <div class="result-item">نوع: ${data.record_type}</div>
+                            ${data.records ? data.records.map(r => `<div class="result-item">${r}</div>`).join('') : '<div class="result-item">بدون نتیجه</div>'}
+                        </div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="lookup-results alert alert-error">
+                            خطا: ${data.error || 'نتیجه‌ای یافت نشد'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="lookup-results alert alert-error">
+                        خطا در ارتباط با سرور
+                    </div>
+                `;
+            }
+        }
+
+        // Check if user is logged in
+        if (authToken) {
+            document.getElementById('authLinks').innerHTML = `
+                <span style="color: var(--text-secondary); margin-right: 1rem;">سلام</span>
+                <button class="btn btn-secondary btn-small" onclick="logout()">خروج</button>
+            `;
+        }
+    </script>
+</body>
+</html>
