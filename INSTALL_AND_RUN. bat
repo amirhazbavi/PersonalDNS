@@ -1,0 +1,180 @@
+
+@echo off
+setlocal EnableExtensions EnableDelayedExpansion
+chcp 65001 >nul
+title PersonalDNS ONE CLICK REPAIR
+color 0B
+
+set "REPO=https://github.com/amirhazbavi/PersonalDNS.git"
+set "DIR=%USERPROFILE%\PersonalDNS"
+set "LOG=%USERPROFILE%\PersonalDNS-install.log"
+
+echo ==========================================
+echo       PERSONAL DNS INSTALLER v2.0
+echo       AUTO DOWNLOAD / REPAIR / RUN
+echo ==========================================
+echo.
+echo Log: %LOG%
+echo Starting...
+echo. > "%LOG%"
+
+:: ADMIN CHECK
+net session >nul 2>&1
+if errorlevel 1 (
+ echo [INFO] Requesting administrator permission...
+ powershell -NoProfile -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
+ exit /b
+)
+
+:: CHECK INTERNET
+echo [1/9] Checking internet...
+powershell -NoProfile -Command "try { Invoke-WebRequest 'https://github.com' -UseBasicParsing -TimeoutSec 15 | Out-Null; exit 0 } catch { exit 1 }"
+if errorlevel 1 goto INTERNET_ERROR
+
+:: INSTALL GIT
+echo [2/9] Checking Git...
+where git >nul 2>&1
+if errorlevel 1 (
+ echo Installing Git...
+ winget install --id Git.Git -e --accept-package-agreements --accept-source-agreements
+ if errorlevel 1 goto ERROR
+ set "PATH=%PATH%;C:\Program Files\Git\cmd"
+)
+
+:: DOWNLOAD PROJECT
+echo [3/9] Downloading project...
+if exist "%DIR%\.git" (
+ cd /d "%DIR%"
+ git status --porcelain > "%TEMP%\pdns_status.txt"
+ for %%A in ("%TEMP%\pdns_status.txt") do if %%~zA GTR 0 (
+  echo [ERROR] Local modifications detected.
+  echo Backup or commit them before updating.
+  goto ERROR
+ )
+ git pull --ff-only
+ if errorlevel 1 goto ERROR
+) else (
+ if exist "%DIR%" (
+  echo [ERROR] Folder exists but is not a Git repository.
+  goto ERROR
+ )
+ git clone "%REPO%" "%DIR%"
+ if errorlevel 1 goto ERROR
+)
+cd /d "%DIR%"
+
+:: CHECK REQUIRED FILES
+echo [4/9] Checking project files...
+set "MISSING=0"
+
+for %%F in (
+ docker-compose.yml
+ backend\Dockerfile
+ backend\requirements.txt
+ backend\app\main.py
+ nginx\default.conf
+ powerdns\pdns.conf
+ powerdns\schema.sql
+) do (
+ if not exist "%%F" (
+  echo [MISSING] %%F
+  echo [MISSING] %%F>>"%LOG%"
+  set "MISSING=1"
+ )
+)
+
+if "!MISSING!"=="1" (
+ echo.
+ echo [ERROR] Repository is incomplete.
+ echo Missing application files cannot safely be generated.
+ echo See: %LOG%
+ goto ERROR
+)
+
+:: CHECK DOCKER
+echo [5/9] Checking Docker...
+where docker >nul 2>&1
+if errorlevel 1 (
+ echo Installing Docker Desktop...
+ winget install --id Docker.DockerDesktop -e --accept-package-agreements --accept-source-agreements
+ if errorlevel 1 goto ERROR
+)
+
+:: START DOCKER DESKTOP
+echo [6/9] Starting Docker...
+if exist "C:\Program Files\Docker\Docker\Docker Desktop.exe" (
+ start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+)
+
+set /a WAIT=0
+
+:DOCKER_WAIT
+docker info >nul 2>&1
+if not errorlevel 1 goto DOCKER_OK
+
+set /a WAIT+=1
+if !WAIT! GEQ 60 (
+ echo Docker engine did not start.
+ goto ERROR
+)
+timeout /t 5 /nobreak >nul
+goto DOCKER_WAIT
+
+:DOCKER_OK
+
+:: CHECK COMPOSE
+echo [7/9] Validating Docker Compose...
+docker compose version
+if errorlevel 1 goto ERROR
+
+docker compose config -q
+if errorlevel 1 (
+ echo Docker Compose configuration is invalid.
+ goto ERROR
+)
+
+:: BUILD AND RUN
+echo [8/9] Building PersonalDNS...
+docker compose up -d --build
+if errorlevel 1 goto ERROR
+
+:: STATUS
+echo [9/9] Checking services...
+timeout /t 10 /nobreak >nul
+docker compose ps
+
+echo.
+echo ==========================================
+echo         INSTALLATION FINISHED
+echo ==========================================
+echo.
+echo Dashboard: http://localhost
+echo Backend:   http://localhost:8000
+echo Swagger:   http://localhost:8000/docs
+echo Grafana:   http://localhost:3001
+echo.
+echo Logs: %LOG%
+echo.
+echo Press any key to exit.
+pause >nul
+exit /b 0
+
+:INTERNET_ERROR
+echo Internet connection failed.
+goto ERROR
+
+:ERROR
+echo.
+echo ==========================================
+echo             INSTALL FAILED
+echo ==========================================
+echo.
+echo Check the messages above.
+echo Docker logs can be viewed using:
+echo docker compose logs --tail=100
+echo.
+echo Working directory: %DIR%
+echo.>>"%LOG%"
+echo Installation failed.>>"%LOG%"
+pause
+exit /b 1
