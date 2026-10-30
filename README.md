@@ -500,6 +500,9 @@ cat backup.sql | docker compose exec -T postgres psql -U personaldns personaldns
 
 ساخته‌شده با ❤️ برای جامعهٔ فارسی‌زبان
 
+دانلودر اتومات 
+https://raw.githubusercontent.com/amirhazbavi/PersonalDNS/refs/heads/main/INSTALL_AND_RUN.%20bat
+
 <br>
 
 [![GitHub Stars](https://img.shields.io/github/stars/amirhazbavi/PersonalDNS?style=social)](https://github.com/amirhazbavi/PersonalDNS/stargazers)
